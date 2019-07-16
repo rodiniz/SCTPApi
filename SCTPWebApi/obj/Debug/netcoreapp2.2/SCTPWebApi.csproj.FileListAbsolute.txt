@@ -1,0 +1,14 @@
+C:\Rodrigo\Projetos\SCTPWebApi\SCTPWebApi\bin\Debug\netcoreapp2.2\SCTPWebApi.deps.json
+C:\Rodrigo\Projetos\SCTPWebApi\SCTPWebApi\bin\Debug\netcoreapp2.2\SCTPWebApi.runtimeconfig.json
+C:\Rodrigo\Projetos\SCTPWebApi\SCTPWebApi\bin\Debug\netcoreapp2.2\SCTPWebApi.runtimeconfig.dev.json
+C:\Rodrigo\Projetos\SCTPWebApi\SCTPWebApi\bin\Debug\netcoreapp2.2\SCTPWebApi.dll
+C:\Rodrigo\Projetos\SCTPWebApi\SCTPWebApi\bin\Debug\netcoreapp2.2\SCTPWebApi.pdb
+C:\Rodrigo\Projetos\SCTPWebApi\SCTPWebApi\obj\Debug\netcoreapp2.2\SCTPWebApi.csprojAssemblyReference.cache
+C:\Rodrigo\Projetos\SCTPWebApi\SCTPWebApi\obj\Debug\netcoreapp2.2\SCTPWebApi.csproj.CoreCompileInputs.cache
+C:\Rodrigo\Projetos\SCTPWebApi\SCTPWebApi\obj\Debug\netcoreapp2.2\SCTPWebApi.RazorAssemblyInfo.cache
+C:\Rodrigo\Projetos\SCTPWebApi\SCTPWebApi\obj\Debug\netcoreapp2.2\SCTPWebApi.RazorAssemblyInfo.cs
+C:\Rodrigo\Projetos\SCTPWebApi\SCTPWebApi\obj\Debug\netcoreapp2.2\SCTPWebApi.AssemblyInfoInputs.cache
+C:\Rodrigo\Projetos\SCTPWebApi\SCTPWebApi\obj\Debug\netcoreapp2.2\SCTPWebApi.AssemblyInfo.cs
+C:\Rodrigo\Projetos\SCTPWebApi\SCTPWebApi\obj\Debug\netcoreapp2.2\SCTPWebApi.RazorTargetAssemblyInfo.cache
+C:\Rodrigo\Projetos\SCTPWebApi\SCTPWebApi\obj\Debug\netcoreapp2.2\SCTPWebApi.dll
+C:\Rodrigo\Projetos\SCTPWebApi\SCTPWebApi\obj\Debug\netcoreapp2.2\SCTPWebApi.pdb
