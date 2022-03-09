@@ -13,16 +13,23 @@ namespace SCTPWebApi.Endpoints
     {
         public override void Configure()
         {
-            Verbs(Http.GET);
-            Routes("/api/getTime");
+            Get("/api/getTime");
             AllowAnonymous();
+        }
+        public async Task<HtmlDocument> GetSchedules(string url)
+        {
+            HttpClient httpClient = new();
+            var response = await httpClient.GetAsync(url);
+            HtmlDocument htmlDoc = new();
+            htmlDoc.LoadHtml(await response.Content.ReadAsStringAsync());
+            return htmlDoc;
         }
         public override async Task HandleAsync(BusHourRequest req, CancellationToken ct)
         {
-            HttpClient httpClient = new ();
-            var response= await httpClient.GetAsync($"http://www.stcp.pt/itinerarium/soapclient.php?codigo={req.BusStopCode}", ct);
-            HtmlDocument htmlDoc = new ();
-            htmlDoc.LoadHtml(await response.Content.ReadAsStringAsync());
+
+            //&linha=0&hash123=WTnUpZydgrp4NdN6RXQQEMvC9nL8CuEbf372D56UBGA
+            HtmlDocument htmlDoc = await GetSchedules($"http://www.stcp.pt/itinerarium/soapclient.php?codigo={req.BusStopCode}&linha=0&hash123=WTnUpZydgrp4NdN6RXQQEMvC9nL8CuEbf372D56UBGA");
+
             var result = new List<NextBus>();
             //msgBox warning
             IEnumerable<HtmlNode> nodes =
@@ -33,6 +40,8 @@ namespace SCTPWebApi.Endpoints
                 await SendAsync(result);
                 return;
             }
+
+
             var tableResults = htmlDoc.GetElementbyId("smsBusResults");
             foreach (HtmlNode row in tableResults.SelectNodes("tr"))
             {
