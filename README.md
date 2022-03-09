@@ -1,2 +1,2 @@
 # STCPApi
-Unoficcial STCP api to get Bus Schedules in Real Time
+Unofficial STCP api to get Bus Schedules in Real Time
