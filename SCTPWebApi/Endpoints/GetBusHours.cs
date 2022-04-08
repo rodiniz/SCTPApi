@@ -14,7 +14,6 @@ namespace SCTPWebApi.Endpoints
     public class GetBusHours : Endpoint<BusHourRequest, List<NextBus>>
     {
         private readonly IMemoryCache _memoryCache;
-        const string CacheKey = "BusHours";
         public GetBusHours(IMemoryCache memoryCache) =>
         _memoryCache = memoryCache;
 
@@ -34,7 +33,7 @@ namespace SCTPWebApi.Endpoints
         private async Task<string> GetHash(string busStopCode)
         {
             string cacheEntry;
-            if (!_memoryCache.TryGetValue(CacheKey, out cacheEntry))
+            if (!_memoryCache.TryGetValue(busStopCode, out cacheEntry))
             {
                 HttpClient httpClient = new();
                 var response = await httpClient.GetAsync($"https://www.stcp.pt/pt/viajar/horarios/?paragem={busStopCode}&t=smsbus");
@@ -48,7 +47,7 @@ namespace SCTPWebApi.Endpoints
                  .SetSlidingExpiration(TimeSpan.FromMinutes(10));
 
                 // Save data in cache.
-                _memoryCache.Set(CacheKey, hash, cacheEntryOptions);
+                _memoryCache.Set(busStopCode, hash, cacheEntryOptions);
                 cacheEntry = hash;
 
             }
