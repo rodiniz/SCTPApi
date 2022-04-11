@@ -10,11 +10,13 @@ builder.Services.AddMemoryCache();
 builder.Services.AddCors();
 var app = builder.Build();
 app.UseAuthorization();
-app.UseFastEndpoints();
+
 app.UseOpenApi();
-app.UseSwaggerUi3(s => s.ConfigureDefaults());
 app.UseCors(x => x
-.AllowAnyOrigin()
-.AllowAnyMethod()
-.AllowAnyHeader());
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .SetIsOriginAllowed(origin => true) // allow any origin
+               .AllowCredentials()); // allow credentials
+app.UseSwaggerUi3(s => s.ConfigureDefaults());
+app.UseFastEndpoints();
 app.Run();
