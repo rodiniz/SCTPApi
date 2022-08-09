@@ -1,8 +1,6 @@
 ﻿using ConsoleApp1.Models;
 using HtmlAgilityPack;
-using Microsoft.Extensions.Caching.Memory;
 using SCTPWebApi.Requests;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -13,10 +11,6 @@ namespace SCTPWebApi.Endpoints
 {
     public class GetBusHours : Endpoint<BusHourRequest, List<NextBus>>
     {
-        private readonly IMemoryCache _memoryCache;
-        public GetBusHours(IMemoryCache memoryCache) =>
-        _memoryCache = memoryCache;
-
         public override void Configure()
         {
             Get("/api/getTime");
@@ -24,38 +18,25 @@ namespace SCTPWebApi.Endpoints
         }
         public async Task<HtmlDocument> GetSchedules(string url)
         {
-            HttpClient httpClient = new();
+            using HttpClient httpClient = new();
             var response = await httpClient.GetAsync(url);
             HtmlDocument htmlDoc = new();
             htmlDoc.LoadHtml(await response.Content.ReadAsStringAsync());
             return htmlDoc;
         }
-        private async Task<string> GetHash(string busStopCode)
+        private static async Task<string> GetHash(string busStopCode)
         {
-            string cacheEntry;
-            if (!_memoryCache.TryGetValue(busStopCode, out cacheEntry))
-            {
-                HttpClient httpClient = new();
-                var response = await httpClient.GetAsync($"https://www.stcp.pt/pt/viajar/horarios/?paragem={busStopCode}&t=smsbus");
-                var html = await response.Content.ReadAsStringAsync();
-                var ini = html.IndexOf("getParagemInfo(");
-                var newHtml = html.Substring(ini);
-                var end = newHtml.IndexOf(")");
-                var hash = html.Substring(ini, end).Split(',')[2].Replace("'", "");
-                var cacheEntryOptions = new MemoryCacheEntryOptions()
-                 // Keep in cache for this time, reset time if accessed.
-                 .SetSlidingExpiration(TimeSpan.FromMinutes(10));
-
-                // Save data in cache.
-                _memoryCache.Set(busStopCode, hash, cacheEntryOptions);
-                cacheEntry = hash;
-
-            }
-            return cacheEntry;
+            using HttpClient httpClient = new();
+            var response = await httpClient.GetAsync($"https://www.stcp.pt/pt/viajar/horarios/?paragem={busStopCode}&t=smsbus");
+            var html = await response.Content.ReadAsStringAsync();
+            var ini = html.IndexOf("getParagemInfo(");
+            var newHtml = html.Substring(ini);
+            var end = newHtml.IndexOf(")");
+            return html.Substring(ini, end).Split(',')[2].Replace("'", "");
         }
         public override async Task HandleAsync(BusHourRequest req, CancellationToken ct)
         {
-            var hash = await GetHash(req.BusStopCode);
+            var hash = await GetHash(req.BusStopCode).ConfigureAwait(false);
             //&linha=0&hash123=WTnUpZydgrp4NdN6RXQQEMvC9nL8CuEbf372D56UBGA
             HtmlDocument htmlDoc = await GetSchedules($"http://www.stcp.pt/itinerarium/soapclient.php?codigo={req.BusStopCode}&linha=0&hash123={hash}");
 
@@ -66,7 +47,7 @@ namespace SCTPWebApi.Endpoints
                     .Where(n => n.HasClass("warning"));
             if (nodes.Any())
             {
-                await SendAsync(result);
+                await SendAsync(result, cancellation: ct).ConfigureAwait(false);
                 return;
             }
 
@@ -84,7 +65,7 @@ namespace SCTPWebApi.Endpoints
                     result.Add(new NextBus { BusName = busNumber, NextHour = nextTime, WaitTime = waitTime });
                 }
             }
-            await SendAsync(result);
+            await SendAsync(result, cancellation: ct).ConfigureAwait(false);
         }
 
     }

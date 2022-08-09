@@ -2,3 +2,5 @@
 SCTPWebApi/obj
 /.vs/SCTPWebApi
 /SCTPWebApi/bin/Debug/net6.0
+SctApiTest/bin
+SctApiTest/obj
