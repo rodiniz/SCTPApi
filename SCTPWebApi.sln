@@ -5,8 +5,6 @@ VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SCTPWebApi", "SCTPWebApi\SCTPWebApi.csproj", "{E56E78A8-898D-4977-8EBA-2F115110CE01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SctApiTest", "SctApiTest\SctApiTest.csproj", "{41CC55AE-E5DB-4409-9923-7AC8A29E85AA}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{E56E78A8-898D-4977-8EBA-2F115110CE01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E56E78A8-898D-4977-8EBA-2F115110CE01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E56E78A8-898D-4977-8EBA-2F115110CE01}.Release|Any CPU.Build.0 = Release|Any CPU
-		{41CC55AE-E5DB-4409-9923-7AC8A29E85AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{41CC55AE-E5DB-4409-9923-7AC8A29E85AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{41CC55AE-E5DB-4409-9923-7AC8A29E85AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{41CC55AE-E5DB-4409-9923-7AC8A29E85AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
