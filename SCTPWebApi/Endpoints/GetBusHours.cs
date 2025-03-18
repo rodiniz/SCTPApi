@@ -22,23 +22,14 @@ namespace SCTPWebApi.Endpoints
             var response = await httpClient.GetAsync(url);
             HtmlDocument htmlDoc = new();
             htmlDoc.LoadHtml(await response.Content.ReadAsStringAsync());
-            return htmlDoc;
+            return htmlDoc;     
         }
-        private static async Task<string> GetHash(string busStopCode)
-        {
-            using HttpClient httpClient = new();
-            var response = await httpClient.GetAsync($"https://www.stcp.pt/pt/viajar/horarios/?paragem={busStopCode}&t=smsbus");
-            var html = await response.Content.ReadAsStringAsync();
-            var ini = html.IndexOf("getParagemInfo(");
-            var newHtml = html.Substring(ini);
-            var end = newHtml.IndexOf(")");
-            return html.Substring(ini, end).Split(',')[2].Replace("'", "");
-        }
+       
         public override async Task HandleAsync(BusHourRequest req, CancellationToken ct)
-        {
-            var hash = await GetHash(req.BusStopCode).ConfigureAwait(false);
-            //&linha=0&hash123=WTnUpZydgrp4NdN6RXQQEMvC9nL8CuEbf372D56UBGA
-            HtmlDocument htmlDoc = await GetSchedules($"http://www.stcp.pt/itinerarium/soapclient.php?codigo={req.BusStopCode}&linha=0&hash123={hash}");
+        {           
+			//&linha=0&hash123=WTnUpZydgrp4NdN6RXQQEMvC9nL8CuEbf372D56UBGA
+			//https://www.stcp.pt/pt/viajar/horarios/?paragem=28J1&t=paragem_detalhe
+			HtmlDocument htmlDoc = await GetSchedules($"https://www.stcp.pt/pt/viajar/horarios/?paragem={req.BusStopCode}");
 
             var result = new List<NextBus>();
             //msgBox warning
@@ -52,8 +43,11 @@ namespace SCTPWebApi.Endpoints
             }
 
 
-            var tableResults = htmlDoc.GetElementbyId("smsBusResults");
-            foreach (HtmlNode row in tableResults.SelectNodes("tr"))
+            var tableResults = htmlDoc.DocumentNode.Descendants(0)
+					.Where(n => n.HasClass("boxResultsBusStop"))
+                    .FirstOrDefault();
+
+			foreach (HtmlNode row in tableResults.SelectNodes("tr"))
             {
                 var cells = row.SelectNodes("td");
                 if (cells != null)
